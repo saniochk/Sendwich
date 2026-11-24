@@ -48,8 +48,13 @@ $testOld=Join-Path $extensions 'Sendwich-previous-test'
 New-Item -ItemType Directory -Path (Join-Path $testOld 'CSXS'),(Join-Path $testOld 'jsx') -Force | Out-Null
 Set-Content -LiteralPath (Join-Path $testOld 'CSXS/manifest.xml') -Value '<ExtensionManifest/>'
 Set-Content -LiteralPath (Join-Path $testOld 'jsx/host.jsx') -Value 'function vb_begin() {} function vb_step() {}'
-$process=Start-Process $exe -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TASKS=figma' -WindowStyle Hidden -PassThru -Wait
-if ($process.ExitCode -ne 0) { throw "Installer exit code: $($process.ExitCode)" }
+$setupLog=Join-Path $work 'setup.log'
+$setupArgs=@('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TASKS=figma',('/LOG="' + $setupLog + '"'))
+$process=Start-Process $exe -ArgumentList $setupArgs -WindowStyle Hidden -PassThru -Wait
+if ($process.ExitCode -ne 0) {
+    if (Test-Path -LiteralPath $setupLog) { Get-Content -LiteralPath $setupLog -Tail 65 | Out-Host }
+    throw "Installer exit code: $($process.ExitCode)"
+}
 foreach($name in 'SendwichAE','SendwichAI') {
     & $ZxpSigner -verify (Join-Path $extensions $name)
     if ($LASTEXITCODE) { throw "Installed $name signature could not be verified" }
