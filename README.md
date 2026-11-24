@@ -12,6 +12,16 @@ Download the installer for your platform from this repository’s **Releases** p
 - **macOS** — close the Adobe apps, mount `Sendwich-0.34.4-macOS.dmg` and run **Install Sendwich**. The installer includes signed Adobe CEP panels and copies the Figma development plugin to Documents. The installer app is ad-hoc signed and has not been notarized by Apple.
 - Restart After Effects and open **Window → Extensions → Sendwich**. Keep the panel open while sending. To send from Illustrator, open **Window → Extensions → Sendwich** in Illustrator.
 
+## Install the combined ZXP
+
+[Download Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp) to install both the After Effects and Illustrator panels. The Figma plugin is installed separately. See the [Russian installation guide](INSTALL-ZXP-RU.md).
+
+1. Save your work and close After Effects and Illustrator.
+2. Open [aescripts ZXP/UXP Installer](https://aescripts.com/learn/post/zxp-installer) and drag `Sendwich.zxp` into its window.
+3. If it says **“No application compatible with Sendwich was found on your computer”**, click **Install** or **Install Anyway** to continue. This compatibility warning can appear even when a supported Adobe application is installed; it did not prevent installation in our Windows test. You do not need to sign in to Creative Cloud to complete that tested installation.
+4. After installation finishes, restart both Adobe applications and open **Window → Extensions → Sendwich** in each one. Keep the After Effects panel open while sending.
+
+This advice applies specifically to the compatibility message above. If the installer reports a signature verification failure or an installation error, resolve that error before continuing. The signed CEP panels do not require PlayerDebugMode. Installation of this combined ZXP on macOS has not yet been verified.
 ## Code signing policy
 
 Sendwich is applying for code signing through [SignPath Foundation](https://signpath.org/). The current Windows installer (`Sendwich-0.34.4-Windows.exe`) is unsigned.
@@ -29,7 +39,7 @@ Figma frame clipping is ignored. Explicit mask layers are imported as track matt
 
 ## Uninstall
 
-On Windows, remove **Sendwich** through Installed Apps. Earlier Sendwich panels found during installation are backed up outside the active Adobe extensions folder. Import the new Figma manifest and approve the connection again. On macOS, delete the `SendwichAE` and `SendwichAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma.
+If you installed the combined ZXP, use ZXP/UXP Installer to uninstall Sendwich. For the Windows EXE installation, remove **Sendwich** through Installed Apps. Earlier Sendwich panels found during installation are backed up outside the active Adobe extensions folder. Import the new Figma manifest and approve the connection again. On macOS, delete the `SendwichAE` and `SendwichAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma.
 
 ## Development
 
