@@ -62,3 +62,8 @@ Never commit the certificate or password. Check that the ZXP has exactly one `CS
 - Editable vectors, text, gradients and mattes from Figma and Illustrator.
 - Local Figma transfer with one-time approval in After Effects. Install the matching versions of both panels.
 - **Explode** and **Merge** tools for After Effects shape layers.
+
+
+## Code signing policy
+
+Sendwich is applying for code signing through [SignPath Foundation](https://signpath.org/). The current Windows installer (Sendwich-0.34.4-Windows.exe) has no Windows Authenticode signature. Adobe CEP panels are signed separately. The macOS installer is ad-hoc signed and has not been notarized by Apple.

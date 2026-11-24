@@ -1,6 +1,9 @@
 # Установка Sendwich через ZXP
 
-[Скачать Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp?build=6ea088325efd)
+| Скачать | Для чего |
+| --- | --- |
+| [Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp?build=6ea088325efd) | Обе панели: After Effects и Illustrator |
+| [Плагин Figma — ZIP](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich-0.34.4-Figma.zip) | Плагин Figma с файлом SendwichFigma/manifest.json |
 
 Один файл устанавливает панели After Effects и Illustrator. Плагин Figma устанавливается отдельно. Заявленные версии: After Effects 22+ и Illustrator 25+.
 
@@ -17,12 +20,16 @@
 
 Установка этого единого ZXP подтверждена пользователем на Windows с After Effects 25.6 и Illustrator 29.8.4. Пользователь подтвердил установку обновлённого пакета и отображение иконки шляпы в ZXP Installer. В пакете один общий манифест. Проверены подпись CEP, временная метка, состав архива и совпадение ресурсов с исходниками. Запуск обеих панелей после установки отдельно ещё не подтверждён. Установка этого ZXP на macOS пока не проверена.
 
-PlayerDebugMode включать не нужно. Подпись CEP не является подписью Microsoft для EXE или нотариальным заверением Apple.
+PlayerDebugMode включать не нужно. Подробнее о подписи других пакетов — в [политике подписи](RELEASE.md#code-signing-policy).
 
-## Другие способы установки
+## Установка в Figma Desktop
 
-[Релиз v0.34.4](https://github.com/saniochk/Sendwich/releases/tag/v0.34.4) также содержит EXE для Windows, DMG для macOS и отдельный Figma-плагин. Выберите один способ установки Adobe-панелей: установка EXE/DMG и ZXP одновременно может оставить несколько копий расширения.
-
+1. Скачайте ZIP плагина Figma по ссылке в таблице выше.
+2. Распакуйте весь архив в постоянную папку, которую выберете сами.
+3. В Figma Desktop откройте макет, затем **Plugins → Development → Import plugin from manifest…**.
+4. В распакованном архиве откройте папку **SendwichFigma** и выберите **manifest.json**.
+5. Сохраните эту папку: Figma загружает плагин из неё. Файлы manifest.json, code.js и ui.html должны оставаться вместе.
+6. Откройте Sendwich в After Effects. В плагине Figma нажмите **Connect to After Effects**, сравните код и подтвердите **Allow** в AE. Затем выделите макет и нажмите **Send to After Effects**.
 ## Удаление
 
-Если Sendwich установлен через ZXP, удалите его через ZXP/UXP Installer.
+Удалите Adobe-панели через ZXP/UXP Installer. В Figma удалите Sendwich из Plugins → Development; после этого при необходимости можно удалить распакованную папку Figma-плагина.
