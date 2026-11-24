@@ -52,8 +52,8 @@ begin
   Result := FileExists(Folder + '\CSXS\manifest.xml') and
             LoadStringFromFile(Folder + '\jsx\host.jsx', Host);
   if Result then
-    Result := ((Pos('function vb_begin(', Host) > 0) and (Pos('function vb_step(', Host) > 0)) or
-              ((Pos('function vb_send(', Host) > 0) and (Pos('function vb_flag(', Host) > 0));
+    Result := ((Pos('function vb_begin(', String(Host)) > 0) and (Pos('function vb_step(', String(Host)) > 0)) or
+              ((Pos('function vb_send(', String(Host)) > 0) and (Pos('function vb_flag(', String(Host)) > 0));
 end;
 
 procedure RestoreMovedPanels;
@@ -77,7 +77,7 @@ begin
   Result := '';
   Root := ExpandConstant('{userappdata}\Adobe\CEP\extensions');
   Backup := ExpandConstant('{userappdata}\Sendwich\Previous Panels\') +
-            GetDateTimeString('yyyymmdd-hhnnss-zzz', '', '');
+            GetDateTimeString('yyyymmdd-hhnnss', #0, #0);
   if FindFirst(Root + '\*', Entry) then
     try
       repeat
