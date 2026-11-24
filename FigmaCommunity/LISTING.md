@@ -12,7 +12,7 @@ Design tools
 ## Description
 Sendwich sends selected Figma artwork to Adobe After Effects as editable shape and text layers and raster footage. Free and open source under the MIT License.
 
-**Download the Sendwich companion panel for Windows or macOS:** https://github.com/saniochk/Sendwich/releases/latest
+**Download the signed Sendwich ZXP and Figma development plugin:** https://github.com/saniochk/Sendwich/releases/latest
 
 **What comes across**
 - Frames, groups, components and instances keep their nesting
@@ -25,6 +25,8 @@ Sendwich sends selected Figma artwork to Adobe After Effects as editable shape a
 - "Send as image": one flattened PNG of the selection or the whole frame
 
 Undo the whole import in After Effects with a single Ctrl/Cmd + Z.
+
+Installation of the combined ZXP is verified on Windows; macOS installation validation is pending.
 
 **Requirements**
 - A separately installed copy of Adobe After Effects 2022 or newer, plus the free Sendwich companion panel. In After Effects, open Window › Extensions › Sendwich.

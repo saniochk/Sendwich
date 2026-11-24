@@ -1,86 +1,36 @@
-name: Build installers
+name: Verify Sendwich
 on:
   workflow_dispatch:
   push:
-    tags: ["v*"]
+    branches: [main]
   pull_request:
-
 permissions:
   contents: read
-
 jobs:
-  windows:
+  verify:
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@v4
-      - name: Verify local transfer
-        run: node --test tests/figma-connection.test.cjs tests/figma-receiver.test.cjs tests/ae-batch.test.cjs tests/figma-fidelity.test.cjs tests/gradient-template.test.cjs tests/raster-placement.test.cjs
-      - name: Build and smoke-test EXE
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run regression tests
+        run: node --test tests/*.test.cjs
+      - name: Validate combined bundle
         shell: pwsh
         run: |
-          $setup = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
-          $compiler = Join-Path $env:RUNNER_TEMP 'InnoSetup'
-          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_4/innosetup-6.7.4.exe' -OutFile $setup
-          $signature = Get-AuthenticodeSignature $setup
-          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Pyrsys') {
-            throw 'Invalid Inno Setup signature'
+          $output = Join-Path $env:RUNNER_TEMP 'sendwich-bundle'
+          ./scripts/stage-zxp.ps1 -OutputDirectory $output
+          $files = @(Get-ChildItem -LiteralPath $output -File -Recurse)
+          $manifests = @($files | Where-Object Name -eq 'manifest.xml')
+          if ($manifests.Count -ne 1) { throw 'Expected one shared manifest' }
+          [xml]$manifest = Get-Content -LiteralPath $manifests[0].FullName
+          if (@($manifest.ExtensionManifest.ExtensionList.Extension).Count -ne 2) { throw 'Expected both panels' }
+          foreach ($node in $manifest.SelectNodes('//MainPath|//ScriptPath|//Icons/Icon')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $output $node.InnerText))) { throw "Missing resource: $($node.InnerText)" }
           }
-          $args = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CURRENTUSER',('/DIR="' + $compiler + '"'))
-          $process = Start-Process $setup -ArgumentList $args -WindowStyle Hidden -Wait -PassThru
-          if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed: $($process.ExitCode)" }
-          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34.4' }
-          $signer = Join-Path $env:RUNNER_TEMP 'ZXPSignCmd.exe'
-          Invoke-WebRequest 'https://raw.githubusercontent.com/Adobe-CEP/CEP-Resources/master/ZXPSignCMD/4.1.3/x64/ZXPSignCmd.exe' -OutFile $signer
-          if ((Get-FileHash -LiteralPath $signer).Hash -ne 'FFC2223167225CE61D024EB463FC5AD1A1BE16133F99EF334A646F7311916C98') { throw 'Adobe signer hash mismatch' }
-          & ./installers/windows/build.ps1 -Compiler (Join-Path $compiler 'ISCC.exe') -ZxpSigner $signer -Version $version -SmokeTest
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Sendwich-Windows
-          path: dist/*.exe
-          if-no-files-found: error
-
-  macos:
-    runs-on: macos-15-intel
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build and verify DMG
-        run: |
-          version=0.34.4
-          if [[ "$GITHUB_REF_TYPE" == tag ]]; then version="${GITHUB_REF_NAME#v}"; fi
-          signer="$RUNNER_TEMP/ZXPSignCmd"
-          curl --fail --location --retry 3 https://raw.githubusercontent.com/Adobe-CEP/CEP-Resources/master/ZXPSignCMD/4.1.3/macOS/ZXPSignCmd -o "$signer"
-          echo "bc773fae0b97416fc7a462e7dadcc00270428a9913480c9b78b5606ff1cfb095  $signer" | shasum -a 256 -c -
-          chmod u+x "$signer"
-          export ZXP_SIGNER="$signer"
-          echo "ZXP_SIGNER=$signer" >> "$GITHUB_ENV"
-          bash installers/macos/build.sh "$version"
-          echo "SENDWICH_DMG=dist/Sendwich-$version-macOS.dmg" >> "$GITHUB_ENV"
-      - name: Smoke-test mounted DMG
-        shell: bash
-        run: |
-          set -euo pipefail
-          mount_dir="$(mktemp -d "$RUNNER_TEMP/sendwich-dmg.XXXXXX")"
-          hdiutil attach -readonly -nobrowse -mountpoint "$mount_dir" "$SENDWICH_DMG"
-          trap 'hdiutil detach "$mount_dir"' EXIT
-          app="$mount_dir/Install Sendwich.app"
-          codesign --verify --strict "$app"
-          test -s "$app/Contents/Resources/applet.icns"
-          bash "$app/Contents/Resources/install.sh"
-          for panel in AE AI; do
-            "$ZXP_SIGNER" -verify "$HOME/Library/Application Support/Adobe/CEP/extensions/Sendwich$panel"
-          done
-          for version in 9 10 11 12 13; do
-            if defaults read "com.adobe.CSXS.$version" PlayerDebugMode >/dev/null 2>&1; then
-              echo "Installer unexpectedly wrote PlayerDebugMode" >&2
-              exit 1
-            fi
-          done
-          for panel in AE AI; do
-            cmp "Sendwich$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/Sendwich$panel/CSXS/manifest.xml"
-          done
-          cmp SendwichFigma/manifest.json "$HOME/Documents/Sendwich/Figma/manifest.json"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Sendwich-macOS
-          path: dist/*.dmg
-          if-no-files-found: error
+          if (@($files | Where-Object Extension -in @('.p12','.pfx','.pem','.key','.log')).Count) { throw 'Unexpected private or log files' }
+          $figma = Get-Content ./SendwichFigma/manifest.json -Raw | ConvertFrom-Json
+          foreach ($entry in @($figma.main,$figma.ui)) {
+            if (-not (Test-Path -LiteralPath (Join-Path ./SendwichFigma $entry))) { throw "Missing Figma resource: $entry" }
+          }

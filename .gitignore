@@ -6,3 +6,8 @@ Thumbs.db
 *.pfx
 *.mobileprovision
 /.rnd
+
+*.pem
+*.key
+*.zxp
+*.log

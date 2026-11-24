@@ -11,7 +11,7 @@ Sendwich sends selected artwork from Figma or Illustrator to After Effects on th
 | [Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp?build=6ea088325efd) | Both After Effects and Illustrator panels |
 | [Figma plugin ZIP](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich-0.34.4-Figma.zip) | Figma plugin, including `SendwichFigma/manifest.json` |
 
-[Installation guide in Russian](INSTALL-ZXP-RU.md). Declared Adobe versions: After Effects 22+ and Illustrator 25+.
+[Installation guide in Russian](INSTALL-ZXP-RU.md). [SHA-256 checksums](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/SHA256SUMS.txt?build=6ea088325efd). Declared Adobe versions: After Effects 22+ and Illustrator 25+.
 
 ### After Effects and Illustrator
 
