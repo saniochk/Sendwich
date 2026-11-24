@@ -72,7 +72,7 @@ h3 { font-size: 12px; font-weight: 600; margin: 0; }
 .stat.busy::before { background: var(--accent); }
 .plate { position: relative; height: 72px; flex: none; background: var(--well); border-radius: var(--r-lg); overflow: hidden; transition: opacity .25s; }
 .plate .anim, .plate .anim .lottie { position: absolute; inset: 0; }
-.plate .anim svg { shape-rendering: crispEdges; }
+.plate .anim svg { shape-rendering: geometricPrecision; }
 .plate .info { position: absolute; inset: 0; padding: 9px 12px; overflow-y: auto; color: var(--dim); font-size: 11px; line-height: 1.5; word-break: break-word; }
 .plate .info .time { color: var(--text); }
 .idle .stat, .idle .plate { opacity: .45; }

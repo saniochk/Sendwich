@@ -5,3 +5,4 @@ Thumbs.db
 *.p12
 *.pfx
 *.mobileprovision
+/.rnd

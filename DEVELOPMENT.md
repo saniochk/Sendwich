@@ -7,7 +7,7 @@
 ## 1. Состав архива
 
 ```
-VectorBridge/
+Sendwich/
   SendwichAE/        CEP-панель After Effects: принимает клип и строит слои; локальный сервер для Figma
     CSXS/manifest.xml    AEFT 22+, CSXS 9, --enable-nodejs --mixed-context (Node для сервера)
     index.html, css/style.css, js/main.js (панель, опрос, сервер), js/anim.js (Lottie-статус), js/csi-lite.js
@@ -37,7 +37,7 @@ VectorBridge/
 ## 2. Архитектура и поток данных
 
 ```
-Illustrator ──(панель AI: vb_send)──► %TEMP%/VectorBridge/<stamp>/clip.json + PNG
+Illustrator ──(панель AI: vb_send)──► %TEMP%/Sendwich/<stamp>/clip.json + PNG
                                          stamp.txt (имя папки), busy.txt (busy/idle)
                                                      │  панель AE опрашивает каждые 300 мс
 Figma ──(плагин: POST http://localhost:7789/clip)──► │  сервер в панели AE пишет то же самое
@@ -130,7 +130,7 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
   - Больше 16 градиентов в слое → `chunksOf`: подряд идущие куски по 16 + 16 с теми же группами (вместо распада на слои).
   - `planGrads` идёт по тому же плану, поэтому партии шаблонов совпадают со слоями.
   - **v0.32:** `buildImage` пишет в статус, какой картинки нет и по какому пути; если копия в Assets не импортировалась — импорт оригинала. Итог «images: N of M placed», если дошли не все.
-  - **v0.31:** каждый кусок плана строится через `buildFrag`. Если шаблон градиентов не импортировался, недостроенные слои удаляются и кусок собирается заново сплошным цветом (`CTX.forceSolid`). Раньше одна ошибка убивала весь слой Illustrator (с v0.30 это одна большая группа). `importTemplate` делает 2 попытки, пишет диагностику (что вернул importFile) и **не удаляет** сбойный `grad_*.aep` из `%TEMP%\VectorBridge`. После двух сбоев подряд — `CTX.tplBroken`, дальше сразу сплошной цвет. Числа в XML градиента всегда конечные (`fnum`).
+  - **v0.31:** каждый кусок плана строится через `buildFrag`. Если шаблон градиентов не импортировался, недостроенные слои удаляются и кусок собирается заново сплошным цветом (`CTX.forceSolid`). Раньше одна ошибка убивала весь слой Illustrator (с v0.30 это одна большая группа). `importTemplate` делает 2 попытки, пишет диагностику (что вернул importFile) и **не удаляет** сбойный `grad_*.aep` из `%TEMP%\Sendwich`. После двух сбоев подряд — `CTX.tplBroken`, дальше сразу сплошной цвет. Числа в XML градиента всегда конечные (`fnum`).
 - **Шейпы без градиентов:** `buildShape` → `addItem` → `addGroup`, `addShapePaths`, `addStroke`, `addFill`. Значения, совпадающие с умолчаниями AE, не выставляются. Ссылки на свойства «протухают» после `addProperty` в том же родителе: контейнеры ищутся по пути индексов (`container`).
 - **Параметрика:** `detectPrimitive` распознаёт Rect (в т. ч. повёрнутый и скруглённый), Ellipse и Polystar. Поворот уходит в трансформацию группы.
 - **Градиенты:** цвета градиента скриптом задать нельзя, поэтому:
@@ -183,7 +183,7 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
 - **manifest.json:**
   - `documentAccess: dynamic-page`, `editorType: ["figma"]`;
   - `networkAccess.allowedDomains: ["http://localhost:7789"]` + `reasoning`. **IP 127.0.0.1 Figma не принимает.**
-  - `id: vector-bridge-dev` заменяется на ID, выданный Figma при публикации.
+  - `id: sendwich-dev` заменяется на ID, выданный Figma при публикации.
 - **code.js:**
   - `send` → `artboardFor`: верхний фрейм выделения, секции пропускаются (`topOf`);
   - `ser` строит дерево. Фреймы, группы, компоненты → `groupItem`: фон фрейма отдельной фигурой, Clip content → clip;
@@ -214,8 +214,8 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
   2. Перезапустить Illustrator и AE.
   3. Окна: Window › Extensions › Sendwich.
 - **Figma:** только приложение для компьютера (плагин в разработке). Plugins › Development › Import plugin from manifest… После обновления файлов заново импортировать не нужно.
-- **Данные:** клипы лежат в `%TEMP%\VectorBridge\<stamp>\`: clip.json, PNG, служебный `aN.svg`. Удаляются через 24 ч.
-- **Отладка в Illustrator:** `dev/tools/VectorBridge_Inspect.jsx` (дерево, gradient origin, matrix) и `dev/tools/VectorBridge_FindMask.jsx`: File › Scripts › Other Script…, отчёт на рабочем столе.
+- **Данные:** клипы лежат в `%TEMP%\Sendwich\<stamp>\`: clip.json, PNG, служебный `aN.svg`. Удаляются через 24 ч.
+- **Отладка в Illustrator:** `dev/tools/Sendwich_Inspect.jsx` (дерево, gradient origin, matrix) и `dev/tools/Sendwich_FindMask.jsx`: File › Scripts › Other Script…, отчёт на рабочем столе.
 
 ---
 

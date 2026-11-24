@@ -149,7 +149,7 @@ test("Figma receiver checks approval and confines image references to received a
   assert.equal(elements.stat.title, notes.replace(" | ", "\n"));
   assert.equal(elements.info.hidden, true);
   assert.equal(steps, 2);
-  assert.equal(files.has("/temp/VectorBridge/stamp.txt"), false, "a disconnected Figma clip cannot be picked up by polling");
+  assert.equal(files.has("/temp/Sendwich/stamp.txt"), false, "a disconnected Figma clip cannot be picked up by polling");
   send(clip("img1.png"), false, "/clip", false);
   scheduled.shift()(); // start staging, leave a step queued
   const calls = scripts.length;

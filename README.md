@@ -8,17 +8,17 @@ Sendwich sends selected artwork from Figma or Illustrator to After Effects on th
 
 Download the installer for your platform from this repository’s **Releases** page. After Effects 22+ and, for Illustrator transfer, Illustrator 25+ are declared in the CEP manifests.
 
-- **Windows** — close the Adobe apps and run `Sendwich-0.34.1-Windows.exe`. Keep the CEP option selected to enable unsigned CEP extensions for your user. The Figma development plugin is optional.
-- **macOS** — close the Adobe apps, mount `Sendwich-0.34.1-macOS.dmg` and run **Install Sendwich**. The installer enables unsigned CEP extensions for your user and copies the Figma development plugin to Documents. Use the signed and notarized build for public distribution.
+- **Windows** — close the Adobe apps and run `Sendwich-0.34.3-Windows.exe`. The installer includes signed Adobe CEP panels. The Figma development plugin is optional.
+- **macOS** — close the Adobe apps, mount `Sendwich-0.34.3-macOS.dmg` and run **Install Sendwich**. The installer enables unsigned CEP extensions for your user and copies the Figma development plugin to Documents. Use the signed and notarized build for public distribution.
 - Restart After Effects and open **Window → Extensions → Sendwich**. Keep the panel open while sending. To send from Illustrator, open **Window → Extensions → Sendwich** in Illustrator.
 
 ## Code signing policy
 
-Sendwich is applying for code signing through [SignPath Foundation](https://signpath.org/). The current Windows installer (`Sendwich-0.34.1-Windows.exe`) is unsigned.
+Sendwich is applying for code signing through [SignPath Foundation](https://signpath.org/). The current Windows installer (`Sendwich-0.34.3-Windows.exe`) is unsigned.
 
 ## Connect Figma
 
-1. In Figma Desktop, open a design file and use **Plugins → Development → Import plugin from manifest…**. Select the manifest path shown by the installer. On a fresh Windows installation, it is in `Documents/Sendwich Figma`. A Community installation will use its listing instead.
+1. In Figma Desktop, open a design file and use **Plugins → Development → Import plugin from manifest…**. Select the manifest path shown by the installer. On a fresh Windows installation, it is in `Documents/Sendwich/Figma`. A Community installation will use its listing instead.
 2. Open Sendwich in After Effects. In Figma, run Sendwich and click **Connect to After Effects**.
 3. Check that both panels show the same short code and click **Allow** in After Effects. Sendwich remembers the connection.
 4. Select a layer or frame and click **Send to After Effects**. If you use Figma in a browser after publication, it may need permission to access the local network.
@@ -29,7 +29,7 @@ Figma frame clipping is ignored. Explicit mask layers are imported as track matt
 
 ## Uninstall
 
-On Windows, remove **Sendwich** through Installed Apps. The Adobe extension folders retain their existing install paths for upgrades. On macOS, delete the `VectorBridgeAE` and `VectorBridgeAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma. The user-wide CEP setting is shared with other extensions and persists after removal.
+On Windows, remove **Sendwich** through Installed Apps. Earlier Sendwich panels found during installation are backed up outside the active Adobe extensions folder. Import the new Figma manifest and approve the connection again. On macOS, delete the `SendwichAE` and `SendwichAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma. On macOS the user-wide CEP setting is shared with other extensions and persists after removal.
 
 ## Development
 

@@ -1,30 +1,72 @@
+
 param(
     [Parameter(Mandatory)][string]$Compiler,
-    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34.1',
+    [Parameter(Mandatory)][string]$ZxpSigner,
+    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34.3',
     [switch]$SmokeTest
 )
-$ErrorActionPreference = 'Stop'
-$root = Split-Path (Split-Path $PSScriptRoot)
-& $Compiler "/DAppVersion=$Version" (Join-Path $PSScriptRoot 'Sendwich.iss')
-if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed with exit code $LASTEXITCODE" }
+$ErrorActionPreference='Stop'
+$root=Split-Path (Split-Path $PSScriptRoot)
+$ZxpSigner=(Resolve-Path -LiteralPath $ZxpSigner).Path
+$Compiler=(Resolve-Path -LiteralPath $Compiler).Path
+$work=Join-Path $env:TEMP ('sendwich-cep-sign-'+[guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $work | Out-Null
+$certificate=Join-Path $work 'cep-signing.p12'
+$password=[Convert]::ToHexString([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
+Push-Location -LiteralPath $work
+try {
+    & $ZxpSigner -selfSignedCert ZZ Sendwich Sendwich 'Sendwich CEP' $password $certificate -validityDays 365
+    if ($LASTEXITCODE) { throw 'CEP certificate generation failed' }
+    foreach($name in 'SendwichAE','SendwichAI') {
+        $source=Join-Path $root $name
+        $links=Get-ChildItem -LiteralPath $source -Recurse -Force | Where-Object { $_.Attributes -band [IO.FileAttributes]::ReparsePoint }
+        if ($links) { throw "$name contains a symbolic link or junction" }
+        $zxp=Join-Path $work "$name.zxp"
+        & $ZxpSigner -sign $source $zxp $certificate $password -tsa http://timestamp.digicert.com
+        if ($LASTEXITCODE) { throw "Could not sign $name" }
+        $payload=Join-Path $work $name
+        New-Item -ItemType Directory -Path $payload | Out-Null
+        tar -xf $zxp -C $payload
+        if ($LASTEXITCODE) { throw "Could not extract signed $name" }
+        & $ZxpSigner -verify $payload
+        if ($LASTEXITCODE) { throw "$name does not verify after extraction" }
+    }
+    & $Compiler "/DAppVersion=$Version" "/DSignedPanelsDir=$work" (Join-Path $PSScriptRoot 'Sendwich.iss')
+    if ($LASTEXITCODE) { throw "Inno Setup failed with exit code $LASTEXITCODE" }
+} finally {
+    Pop-Location
+    if (Test-Path -LiteralPath $certificate -PathType Leaf) { [IO.File]::Delete($certificate) }
+    $password=$null
+}
 if (!$SmokeTest) { return }
 
-# Use only on a disposable CI runner. This installs and uninstalls the panels.
-$exe = Join-Path $root "dist/Sendwich-$Version-Windows.exe"
-$process = Start-Process $exe -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TASKS=figma,cepdebug' -WindowStyle Hidden -PassThru -Wait
-if ($process.ExitCode -ne 0) { throw "Installer exit code $($process.ExitCode)" }
-$extensions = Join-Path $env:APPDATA 'Adobe/CEP/extensions'
-$documents = [Environment]::GetFolderPath('MyDocuments')
-foreach ($manifest in @(
-    (Join-Path $extensions 'VectorBridgeAE/CSXS/manifest.xml'),
-    (Join-Path $extensions 'VectorBridgeAI/CSXS/manifest.xml'),
-    (Join-Path $documents 'Sendwich Figma/manifest.json')
-)) {
-    if (!(Test-Path $manifest)) { throw "Missing installed manifest: $manifest" }
+# This mode is for a disposable CI account.
+$exe=Join-Path $root "dist/Sendwich-$Version-Windows.exe"
+$extensions=Join-Path $env:APPDATA 'Adobe/CEP/extensions'
+$documents=[Environment]::GetFolderPath('MyDocuments')
+$testOld=Join-Path $extensions 'Sendwich-previous-test'
+New-Item -ItemType Directory -Path (Join-Path $testOld 'CSXS'),(Join-Path $testOld 'jsx') -Force | Out-Null
+Set-Content -LiteralPath (Join-Path $testOld 'CSXS/manifest.xml') -Value '<ExtensionManifest/>'
+Set-Content -LiteralPath (Join-Path $testOld 'jsx/host.jsx') -Value 'function vb_begin() {} function vb_step() {}'
+$process=Start-Process $exe -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TASKS=figma' -WindowStyle Hidden -PassThru -Wait
+if ($process.ExitCode -ne 0) { throw "Installer exit code: $($process.ExitCode)" }
+foreach($name in 'SendwichAE','SendwichAI') {
+    & $ZxpSigner -verify (Join-Path $extensions $name)
+    if ($LASTEXITCODE) { throw "Installed $name signature could not be verified" }
 }
-$uninstaller = Join-Path $env:LOCALAPPDATA 'Sendwich/unins000.exe'
-$process = Start-Process $uninstaller -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -WindowStyle Hidden -PassThru -Wait
-if ($process.ExitCode -ne 0) { throw "Uninstaller exit code $($process.ExitCode)" }
-if (Test-Path (Join-Path $extensions 'VectorBridgeAE/CSXS/manifest.xml')) {
-    throw 'After Effects panel was not removed'
+if (!(Test-Path -LiteralPath (Join-Path $documents 'Sendwich/Figma/manifest.json'))) { throw 'Missing Figma manifest' }
+if (Test-Path -LiteralPath $testOld) { throw 'Earlier panel was not moved out of the CEP directory' }
+$backup=Join-Path $env:APPDATA 'Sendwich/Previous Panels'
+if (!(Get-ChildItem -LiteralPath $backup -Recurse -Filter 'host.jsx' | Where-Object FullName -match 'Sendwich-previous-test')) {
+    throw 'Earlier panel backup not found'
+}
+$adobe=Get-ChildItem -LiteralPath 'HKCU:\Software\Adobe' -ErrorAction SilentlyContinue
+if ($adobe | Where-Object { $_.PSChildName -match '^CSXS\.\d+$' -and $_.GetValueNames() -contains 'PlayerDebugMode' }) {
+    throw 'The installer wrote a CEP debug setting'
+}
+$uninstaller=Join-Path $env:LOCALAPPDATA 'Sendwich/Setup/unins000.exe'
+$process=Start-Process $uninstaller -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -WindowStyle Hidden -PassThru -Wait
+if ($process.ExitCode -ne 0) { throw "Uninstaller exit code: $($process.ExitCode)" }
+foreach($name in 'SendwichAE','SendwichAI') {
+    if (Test-Path -LiteralPath (Join-Path $extensions "$name/CSXS/manifest.xml")) { throw "$name remains after uninstall" }
 }

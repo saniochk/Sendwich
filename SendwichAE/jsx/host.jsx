@@ -525,7 +525,7 @@ var VB_AE = VB_AE || (function () {
         var end = 8 + u32(tplCache, 4), root = rifxParse(tplCache, 0, end)[0], tail = tplCache.substr(end);
         gradientTree(root, item);
         tplN++;
-        var dir = new Folder(Folder.temp.fsName + "/VectorBridge"); if (!dir.exists) dir.create();
+        var dir = new Folder(Folder.temp.fsName + "/Sendwich"); if (!dir.exists) dir.create();
         var path = dir.fsName + "/grad_" + new Date().getTime() + "_" + tplN + ".aep";
         if (!writeBinary(path, rifxWrite(root) + tail)) throw new Error("cannot write " + path);
         var file = new File(path), folder = null;
@@ -684,20 +684,16 @@ var VB_AE = VB_AE || (function () {
     function assetFolder() {
         var base = app.project.file ? app.project.file.parent.fsName : Folder.myDocuments.fsName;
         var f = new Folder(base + "/Sendwich Assets");
-        var legacy = new Folder(base + "/Vector Bridge Assets");
-        if (!f.exists && legacy.exists) return legacy;
         if (!f.exists) f.create();
         return f;
     }
     function projectFolder() {
-        var legacy = null;
         for (var i = 1; i <= app.project.numItems; i++) {
             var it = app.project.item(i);
             if (!(it instanceof FolderItem)) continue;
             if (it.name === "Sendwich") return it;
-            if (it.name === "Vector Bridge") legacy = it;
         }
-        var folder = legacy || app.project.items.addFolder("Sendwich");
+        var folder = app.project.items.addFolder("Sendwich");
         CTX.assetBin = folder;
         return folder;
     }
@@ -1274,7 +1270,7 @@ var VB_AE = VB_AE || (function () {
     return { run: run, begin: begin, step: step, cancel: cancel, expire: expire, setExt: function (p) { EXT_DIR = String(p).replace(/\\/g, "/"); } };
 })();
 
-function vb_root() { return Folder.temp.fsName + "/VectorBridge"; }
+function vb_root() { return Folder.temp.fsName + "/Sendwich"; }
 function vb_setExt(p) { try { VB_AE.setExt(p); return "OK"; } catch (e) { return "ERR"; } }
 function vb_begin(stampId, extensionPath) {
     try { if (extensionPath) VB_AE.setExt(extensionPath); return VB_AE.begin(vb_root() + "/" + stampId + "/clip.json", stampId); }

@@ -160,7 +160,7 @@
   function startServer() {
     if (!http || !fs || !crypto || !root) return;
     var key = "", pair = null, pairTimer = null;
-    try { key = localStorage.getItem("vectorbridge.ae.key") || ""; } catch (e) {}
+    try { key = localStorage.getItem("sendwich.ae.key") || ""; } catch (e) {}
     var PAIR_TIMEOUT = 60000;
     function showPair(candidate) {
       clearTimeout(pairTimer);
@@ -173,7 +173,7 @@
       if (!pair || pair.status !== "pending" || Date.now() >= pair.until) return;
       if (approved) {
         try {
-          localStorage.setItem("vectorbridge.ae.key", pair.candidate);
+          localStorage.setItem("sendwich.ae.key", pair.candidate);
           key = pair.candidate;
         } catch (e) {
           pair.status = "error"; $("pairing").hidden = true; return;
@@ -299,7 +299,7 @@
       if (server) server.close();
     });
     ext = decodeURIComponent(window.location.pathname).replace(/^\/([A-Za-z]:)/, "$1").replace(/\/[^/]*$/, "");
-    root = os.tmpdir().replace(/\\/g, "/") + "/VectorBridge";
+    root = os.tmpdir().replace(/\\/g, "/") + "/Sendwich";
     VBAnim.init($("anim"), ext, fs);
     startServer();
     readFile("stamp.txt", function (stamp) {

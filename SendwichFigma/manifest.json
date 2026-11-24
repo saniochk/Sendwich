@@ -1,6 +1,6 @@
 {
   "name": "Sendwich",
-  "id": "vector-bridge-dev",
+  "id": "sendwich-dev",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",

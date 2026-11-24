@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 
-version="${1:-0.34.1}"
+version="${1:-0.34.3}"
 [[ "$version" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || { echo "Invalid version" >&2; exit 1; }
 work="$(mktemp -d)"
 trap 'rm -r "$work"' EXIT
@@ -23,7 +23,7 @@ for size in 16 32 128 256 512; do
   sips -z "$((size*2))" "$((size*2))" installers/macos/sendwich-mascot.png --out "$work/Sendwich.iconset/icon_${size}x${size}@2x.png" >/dev/null
 done
 iconutil -c icns "$work/Sendwich.iconset" -o "$resources/applet.icns"
-plutil -replace CFBundleIdentifier -string com.vectorbridge.installer "$app/Contents/Info.plist"
+plutil -replace CFBundleIdentifier -string com.sendwich.installer "$app/Contents/Info.plist"
 plutil -replace CFBundleShortVersionString -string "$version" "$app/Contents/Info.plist"
 plutil -replace CFBundleVersion -string "$version" "$app/Contents/Info.plist"
 

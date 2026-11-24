@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="7.0" ExtensionBundleId="com.vectorbridge.ae" ExtensionBundleVersion="0.34.1" ExtensionBundleName="Sendwich" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.sendwich.ae" ExtensionBundleVersion="0.34.3" ExtensionBundleName="Sendwich" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ExtensionList>
-    <Extension Id="com.vectorbridge.ae.panel" Version="0.34.1"/>
+    <Extension Id="com.sendwich.ae.panel" Version="0.34.3"/>
   </ExtensionList>
   <ExecutionEnvironment>
     <HostList>
@@ -15,7 +15,7 @@
     </RequiredRuntimeList>
   </ExecutionEnvironment>
   <DispatchInfoList>
-    <Extension Id="com.vectorbridge.ae.panel">
+    <Extension Id="com.sendwich.ae.panel">
       <DispatchInfo>
         <Resources>
           <MainPath>./index.html</MainPath>

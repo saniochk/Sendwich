@@ -44,14 +44,14 @@ function vb_send(mode, scope, scale) {
 }
 function vb_flag(v) {
     try {
-        var d = new Folder(Folder.temp.fsName + "/VectorBridge"); if (!d.exists) d.create();
+        var d = new Folder(Folder.temp.fsName + "/Sendwich"); if (!d.exists) d.create();
         var f = new File(d.fsName + "/busy.txt"); f.encoding = "UTF-8";
         if (f.open("w")) { f.write(v); f.close(); }
     } catch (e) {}
 }
 
 function vb__send(mode, scope, scale) {
-    var VERSION = "0.34.1";
+    var VERSION = "0.34.3";
     if (app.documents.length === 0) return "ERR:NODOC";
     var doc = app.activeDocument, sel = doc.selection;
     var needSel = !(mode === "image" && scope === "artboard");
@@ -62,7 +62,7 @@ function vb__send(mode, scope, scale) {
     var stats = { paths: 0, texts: 0, images: 0, gradients: 0, clips: 0, skipped: {}, errors: [] };
 
     // ---------- output folder for this send ----------
-    var root = new Folder(Folder.temp.fsName + "/VectorBridge");
+    var root = new Folder(Folder.temp.fsName + "/Sendwich");
     if (!root.exists) root.create();
     vb_cleanup(root);
     var stampId = String(new Date().getTime()) + "-" + Math.floor(Math.random() * 1e6);
@@ -452,7 +452,7 @@ function vb__send(mode, scope, scale) {
     // Illustrator: "Release Opacity Mask" (Transparency panel, played as an action) turns it into a normal object
     // in the temp document, and its real paths are read like any clipping path. The source document is never touched.
     function hexStr(t) { var h = ""; for (var i = 0; i < t.length; i++) { var c = t.charCodeAt(i).toString(16); h += (c.length < 2 ? "0" : "") + c; } return "[ " + t.length + " " + h + " ]"; }
-    var OM_SET = "VectorBridgeOM", OM_ACT = "Release";
+    var OM_SET = "SendwichOM", OM_ACT = "Release";
     function loadReleaseAction() {
         var aia = ["/version 3", "/name " + hexStr(OM_SET), "/isOpen 1", "/actionCount 1", "/action-1 {",
             "	/name " + hexStr(OM_ACT), "	/keyIndex 0", "	/colorIndex 0", "	/isOpen 1", "	/eventCount 1", "	/event-1 {",

@@ -28,8 +28,11 @@ jobs:
           $args = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CURRENTUSER',('/DIR="' + $compiler + '"'))
           $process = Start-Process $setup -ArgumentList $args -WindowStyle Hidden -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed: $($process.ExitCode)" }
-          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34.1' }
-          & ./installers/windows/build.ps1 -Compiler (Join-Path $compiler 'ISCC.exe') -Version $version -SmokeTest
+          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34.3' }
+          $signer = Join-Path $env:RUNNER_TEMP 'ZXPSignCmd.exe'
+          Invoke-WebRequest 'https://raw.githubusercontent.com/Adobe-CEP/CEP-Resources/master/ZXPSignCMD/4.1.3/x64/ZXPSignCmd.exe' -OutFile $signer
+          if ((Get-FileHash -LiteralPath $signer).Hash -ne 'FFC2223167225CE61D024EB463FC5AD1A1BE16133F99EF334A646F7311916C98') { throw 'Adobe signer hash mismatch' }
+          & ./installers/windows/build.ps1 -Compiler (Join-Path $compiler 'ISCC.exe') -ZxpSigner $signer -Version $version -SmokeTest
       - uses: actions/upload-artifact@v4
         with:
           name: Sendwich-Windows
@@ -42,7 +45,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and verify DMG
         run: |
-          version=0.34.1
+          version=0.34.3
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then version="${GITHUB_REF_NAME#v}"; fi
           bash installers/macos/build.sh "$version"
           echo "SENDWICH_DMG=dist/Sendwich-$version-macOS.dmg" >> "$GITHUB_ENV"
@@ -58,9 +61,9 @@ jobs:
           test -s "$app/Contents/Resources/applet.icns"
           bash "$app/Contents/Resources/install.sh"
           for panel in AE AI; do
-            cmp "Sendwich$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/VectorBridge$panel/CSXS/manifest.xml"
+            cmp "Sendwich$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/Sendwich$panel/CSXS/manifest.xml"
           done
-          cmp SendwichFigma/manifest.json "$HOME/Documents/Sendwich Figma/manifest.json"
+          cmp SendwichFigma/manifest.json "$HOME/Documents/Sendwich/Figma/manifest.json"
       - uses: actions/upload-artifact@v4
         with:
           name: Sendwich-macOS

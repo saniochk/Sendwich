@@ -3,7 +3,7 @@
   "use strict";
   var IS_CEP = !!window.__adobe_cep__;
   var $ = function (id) { return document.getElementById(id); };
-  var KEY = "vectorbridge.ai.v1";
+  var KEY = "sendwich.ai.v1";
   var opt = { scope: "selection", scale: "2" };
   try { var saved = JSON.parse(localStorage.getItem(KEY) || "{}"); for (var k in saved) opt[k] = saved[k]; } catch (e) {}
   function saveOpt() { try { localStorage.setItem(KEY, JSON.stringify(opt)); } catch (e) {} }
