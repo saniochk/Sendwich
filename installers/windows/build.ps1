@@ -2,7 +2,7 @@
 param(
     [Parameter(Mandatory)][string]$Compiler,
     [Parameter(Mandatory)][string]$ZxpSigner,
-    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34.3',
+    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34.4',
     [switch]$SmokeTest
 )
 $ErrorActionPreference='Stop'

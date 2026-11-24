@@ -43,7 +43,4 @@ for panel in AE AI; do
   ditto "$payload/Sendwich$panel" "$cep/Sendwich$panel"
 done
 ditto "$payload/SendwichFigma" "$figma"
-for version in 9 10 11 12 13; do
-  defaults write "com.adobe.CSXS.$version" PlayerDebugMode -string 1
-done
 printf '%s\n' "$figma/manifest.json"

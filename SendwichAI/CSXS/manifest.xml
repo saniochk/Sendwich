@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ExtensionManifest Version="7.0" ExtensionBundleId="com.sendwich.ai" ExtensionBundleVersion="0.34.3" ExtensionBundleName="Sendwich" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExtensionManifest Version="7.0" ExtensionBundleId="com.sendwich.ai" ExtensionBundleVersion="0.34.4" ExtensionBundleName="Sendwich" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ExtensionList>
-    <Extension Id="com.sendwich.ai.panel" Version="0.34.3"/>
+    <Extension Id="com.sendwich.ai.panel" Version="0.34.4"/>
   </ExtensionList>
   <ExecutionEnvironment>
     <HostList>
