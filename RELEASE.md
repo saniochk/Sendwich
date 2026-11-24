@@ -25,7 +25,7 @@ Never commit the certificate or password. Keep a signed package unchanged after 
 
 ZIP the `SendwichFigma` directory with `manifest.json`, `code.js`, `ui.html`, `LICENSE` and `THIRD_PARTY_NOTICES.txt`. Keep that directory name inside the archive. Users extract the full archive and import `SendwichFigma/manifest.json` in Figma Desktop.
 
-The checked-in development manifest is for local installation. Figma Community publication needs the publisher's permanent plugin ID; see the [submission checklist](FigmaCommunity/CHECKLIST_RU.md).
+The checked-in manifest uses the permanent Figma publication ID `1707136691372303390`. Preserve this ID for updates; see the [submission checklist](FigmaCommunity/CHECKLIST_RU.md).
 
 ## Verify a release
 
