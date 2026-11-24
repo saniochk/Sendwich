@@ -14,7 +14,7 @@ Download the installer for your platform from this repository’s **Releases** p
 
 ## Install the combined ZXP
 
-[Download Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp) to install both the After Effects and Illustrator panels. The Figma plugin is installed separately. See the [Russian installation guide](INSTALL-ZXP-RU.md).
+[Download Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp) to install both the After Effects and Illustrator panels. The Figma plugin is installed separately. See the [Russian installation guide](INSTALL-ZXP-RU.md). The combined package includes the Sendwich hat icon and one shared CEP manifest; installation and icon display were confirmed on Windows.
 
 1. Save your work and close After Effects and Illustrator.
 2. Open [aescripts ZXP/UXP Installer](https://aescripts.com/learn/post/zxp-installer) and drag `Sendwich.zxp` into its window.

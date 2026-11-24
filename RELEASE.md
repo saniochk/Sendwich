@@ -8,6 +8,24 @@ The three runtime packages are checked in and can be installed without a JavaScr
 - On macOS with Xcode Command Line Tools, run `bash installers/macos/build.sh`. Output is `dist/Sendwich-0.34.4-macOS.dmg`. Set `MACOS_SIGN_IDENTITY` to your Developer ID Application identity and `MACOS_NOTARY_PROFILE` to an existing local notarytool keychain profile to sign, notarize and staple the DMG. Builds without credentials are for testing. See [Apple’s distribution guide](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution).
 - On GitHub, run **Actions → Build installers → Run workflow** after pushing the repository. Download the Windows and macOS artifacts. The workflow builds test artifacts. It verifies install/uninstall on a disposable Windows runner and mounts the DMG on a disposable macOS runner to verify the installer payload. Use a Mac with Adobe apps and Figma for the interactive checks below.
 
+## Build the combined ZXP
+
+Stage both panels with one shared manifest from PowerShell:
+
+```powershell
+./scripts/stage-zxp.ps1 -OutputDirectory ./dist/zxp-bundle
+```
+
+The output directory must not already exist. The script omits the individual manifests and debug/signature metadata, sets each panel's host and resource paths, and includes its hat icons at standard and double resolution. It also adjusts the Illustrator animation resource path for the combined bundle.
+
+Sign the staged folder with Adobe ZXPSignCmd and your signing certificate stored outside this repository:
+
+```powershell
+& $ZxpSigner -sign ./dist/zxp-bundle ./dist/Sendwich.zxp $CertificatePath $CertificatePassword -tsa http://timestamp.digicert.com
+& $ZxpSigner -verify ./dist/Sendwich.zxp -certInfo
+```
+
+Never commit the certificate or password. Check that the ZXP has exactly one `CSXS/manifest.xml`, two panel declarations, valid icon/entry-point paths, and a valid signature and timestamp. Windows installation and the installer hat icon were confirmed by the user for the published combined package. A combined-package macOS installation has not yet been tested; do not infer it from signature verification.
 ## Verify a release candidate
 
 1. Windows and macOS. Install on a clean user profile and restart the Adobe apps. Check both panels appear and can be opened.

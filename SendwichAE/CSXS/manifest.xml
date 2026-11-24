@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ExtensionManifest Version="7.0" ExtensionBundleId="com.sendwich.ae" ExtensionBundleVersion="0.34.4" ExtensionBundleName="Sendwich" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ExtensionList>
-    <Extension Id="com.sendwich.ae.panel" Version="0.34.4"/>
+    <Extension Id="com.sendwich.ae.panel" Version="0.34.4" />
   </ExtensionList>
   <ExecutionEnvironment>
     <HostList>
-      <Host Name="AEFT" Version="[22.0,99.9]"/>
+      <Host Name="AEFT" Version="[22.0,99.9]" />
     </HostList>
     <LocaleList>
-      <Locale Code="All"/>
+      <Locale Code="All" />
     </LocaleList>
     <RequiredRuntimeList>
-      <RequiredRuntime Name="CSXS" Version="9.0"/>
+      <RequiredRuntime Name="CSXS" Version="9.0" />
     </RequiredRuntimeList>
   </ExecutionEnvironment>
   <DispatchInfoList>
@@ -33,9 +33,21 @@
           <Type>Panel</Type>
           <Menu>Sendwich</Menu>
           <Geometry>
-            <Size><Height>220</Height><Width>300</Width></Size>
-            <MinSize><Height>180</Height><Width>220</Width></MinSize>
+            <Size>
+              <Height>220</Height>
+              <Width>300</Width>
+            </Size>
+            <MinSize>
+              <Height>180</Height>
+              <Width>220</Width>
+            </MinSize>
           </Geometry>
+          <Icons>
+            <Icon Type="Normal">./img/sendwich.png</Icon>
+            <Icon Type="RollOver">./img/sendwich.png</Icon>
+            <Icon Type="DarkNormal">./img/sendwich.png</Icon>
+            <Icon Type="DarkRollOver">./img/sendwich.png</Icon>
+          </Icons>
         </UI>
       </DispatchInfo>
     </Extension>
