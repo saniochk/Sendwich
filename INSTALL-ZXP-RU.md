@@ -1,6 +1,6 @@
 # Установка Sendwich через ZXP
 
-[Скачать Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp)
+[Скачать Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp?build=6ea088325efd)
 
 Один файл устанавливает панели After Effects и Illustrator. Плагин Figma устанавливается отдельно. Заявленные версии: After Effects 22+ и Illustrator 25+.
 
