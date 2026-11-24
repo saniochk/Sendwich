@@ -1,0 +1,13 @@
+{
+  "name": "Sendwich",
+  "id": "vector-bridge-dev",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["http://localhost:7789"],
+    "reasoning": "Sends the selected layers to the Sendwich panel in Adobe After Effects running on the same computer. Nothing is sent to the internet."
+  }
+}

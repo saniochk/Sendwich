@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Sendwich - (c) 2026 Saniochk. MIT License, see LICENSE. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sendwich</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app" class="idle">
+  <button class="btn primary big" id="btnSend" type="button" title="Shapes, text and images keep their names and hierarchy">Send to After Effects</button>
+
+  <hr>
+  <h3>Rasterize</h3>
+  <div class="row"><span>Source</span><div class="seg" data-k="scope"><button data-v="selection">Selection</button><button data-v="artboard">Artboard</button></div></div>
+  <div class="row"><span>Scale</span><div class="seg" data-k="scale"><button data-v="1">1&times;</button><button data-v="2">2&times;</button><button data-v="4">4&times;</button></div></div>
+  <button class="btn" id="btnImage" type="button" title="Send one flattened image; Scale also sets the resolution of images inside a normal Send">Send as image</button>
+
+  <hr>
+  <div class="stat ready" id="stat"><span id="sTitle">Ready</span></div>
+  <div class="plate"><div class="anim" id="anim"></div><div class="info" id="info"></div><div class="info idle-hint">Select artwork and click Send.</div></div>
+</div>
+<script src="js/csi-lite.js"></script>
+<script src="js/lottie_light.min.js"></script>
+<script src="js/anim.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

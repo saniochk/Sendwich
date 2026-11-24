@@ -1,0 +1,68 @@
+name: Build installers
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify local transfer
+        run: node --test tests/figma-connection.test.cjs tests/figma-receiver.test.cjs tests/ae-batch.test.cjs tests/figma-fidelity.test.cjs tests/gradient-template.test.cjs tests/raster-placement.test.cjs
+      - name: Build and smoke-test EXE
+        shell: pwsh
+        run: |
+          $setup = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
+          $compiler = Join-Path $env:RUNNER_TEMP 'InnoSetup'
+          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_4/innosetup-6.7.4.exe' -OutFile $setup
+          $signature = Get-AuthenticodeSignature $setup
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Pyrsys') {
+            throw 'Invalid Inno Setup signature'
+          }
+          $args = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CURRENTUSER',('/DIR="' + $compiler + '"'))
+          $process = Start-Process $setup -ArgumentList $args -WindowStyle Hidden -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed: $($process.ExitCode)" }
+          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34' }
+          & ./installers/windows/build.ps1 -Compiler (Join-Path $compiler 'ISCC.exe') -Version $version -SmokeTest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sendwich-Windows
+          path: dist/*.exe
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and verify DMG
+        run: |
+          version=0.34
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then version="${GITHUB_REF_NAME#v}"; fi
+          bash installers/macos/build.sh "$version"
+          echo "SENDWICH_DMG=dist/Sendwich-$version-macOS.dmg" >> "$GITHUB_ENV"
+      - name: Smoke-test mounted DMG
+        shell: bash
+        run: |
+          set -euo pipefail
+          mount_dir="$(mktemp -d "$RUNNER_TEMP/sendwich-dmg.XXXXXX")"
+          hdiutil attach -readonly -nobrowse -mountpoint "$mount_dir" "$SENDWICH_DMG"
+          trap 'hdiutil detach "$mount_dir"' EXIT
+          app="$mount_dir/Install Sendwich.app"
+          codesign --verify --strict "$app"
+          test -s "$app/Contents/Resources/applet.icns"
+          bash "$app/Contents/Resources/install.sh"
+          for panel in VectorBridgeAE VectorBridgeAI; do
+            cmp "$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/$panel/CSXS/manifest.xml"
+          done
+          cmp VectorBridgeFigma/manifest.json "$HOME/Documents/Sendwich Figma/manifest.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Sendwich-macOS
+          path: dist/*.dmg
+          if-no-files-found: error
