@@ -4,7 +4,7 @@ const path = require("node:path");
 const test = require("node:test");
 const vm = require("node:vm");
 
-const dir = path.join(__dirname, "../VectorBridgeAE/jsx");
+const dir = path.join(__dirname, "../SendwichAE/jsx");
 const host = fs.readFileSync(path.join(dir, "host.jsx"), "utf8");
 const raw = fs.readFileSync(path.join(dir, "gradients.aep"), "latin1");
 const seam = "    return { run: run, begin: begin, step: step, cancel: cancel,";

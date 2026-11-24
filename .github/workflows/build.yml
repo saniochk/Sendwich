@@ -28,7 +28,7 @@ jobs:
           $args = @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CURRENTUSER',('/DIR="' + $compiler + '"'))
           $process = Start-Process $setup -ArgumentList $args -WindowStyle Hidden -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw "Inno Setup installation failed: $($process.ExitCode)" }
-          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34' }
+          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { '0.34.1' }
           & ./installers/windows/build.ps1 -Compiler (Join-Path $compiler 'ISCC.exe') -Version $version -SmokeTest
       - uses: actions/upload-artifact@v4
         with:
@@ -37,12 +37,12 @@ jobs:
           if-no-files-found: error
 
   macos:
-    runs-on: macos-15
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - name: Build and verify DMG
         run: |
-          version=0.34
+          version=0.34.1
           if [[ "$GITHUB_REF_TYPE" == tag ]]; then version="${GITHUB_REF_NAME#v}"; fi
           bash installers/macos/build.sh "$version"
           echo "SENDWICH_DMG=dist/Sendwich-$version-macOS.dmg" >> "$GITHUB_ENV"
@@ -57,10 +57,10 @@ jobs:
           codesign --verify --strict "$app"
           test -s "$app/Contents/Resources/applet.icns"
           bash "$app/Contents/Resources/install.sh"
-          for panel in VectorBridgeAE VectorBridgeAI; do
-            cmp "$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/$panel/CSXS/manifest.xml"
+          for panel in AE AI; do
+            cmp "Sendwich$panel/CSXS/manifest.xml" "$HOME/Library/Application Support/Adobe/CEP/extensions/VectorBridge$panel/CSXS/manifest.xml"
           done
-          cmp VectorBridgeFigma/manifest.json "$HOME/Documents/Sendwich Figma/manifest.json"
+          cmp SendwichFigma/manifest.json "$HOME/Documents/Sendwich Figma/manifest.json"
       - uses: actions/upload-artifact@v4
         with:
           name: Sendwich-macOS

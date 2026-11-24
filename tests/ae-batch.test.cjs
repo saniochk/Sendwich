@@ -10,7 +10,7 @@ test("192 layers are staged across calls, cancelled without changing the target,
     app: "figma", doc: "Large layout", artboard: { w: 1000, h: 800 },
     items: Array.from({ length: 192 }, (_, index) => shape(index))
   };
-  const source = fs.readFileSync(path.join(__dirname, "../VectorBridgeAE/jsx/host.jsx"), "utf8");
+  const source = fs.readFileSync(path.join(__dirname, "../SendwichAE/jsx/host.jsx"), "utf8");
   const seam = "    return { run: run, begin: begin, step: step, cancel: cancel,";
   assert.ok(source.includes(seam));
   const withStubs = source.replace(seam, `

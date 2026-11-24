@@ -51,7 +51,7 @@ function vb_flag(v) {
 }
 
 function vb__send(mode, scope, scale) {
-    var VERSION = "0.34";
+    var VERSION = "0.34.1";
     if (app.documents.length === 0) return "ERR:NODOC";
     var doc = app.activeDocument, sel = doc.selection;
     var needSel = !(mode === "image" && scope === "artboard");

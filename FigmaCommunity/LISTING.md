@@ -4,13 +4,15 @@
 Sendwich
 
 ## Tagline
-Send Figma layers to After Effects as editable shape layers, text and images — in one click.
+Send editable Figma layers to After Effects.
 
 ## Category
-Design tools (or: Prototyping & animation)
+Design tools
 
 ## Description
-Sendwich sends the selected Figma layers to Adobe After Effects as native, editable layers — with names and hierarchy kept.
+Sendwich sends selected Figma artwork to Adobe After Effects as editable shape and text layers and raster footage. Free and open source under the MIT License.
+
+**Download the Sendwich companion panel for Windows or macOS:** https://github.com/saniochk/Sendwich/releases/latest
 
 **What comes across**
 - Frames, groups, components and instances keep their nesting
@@ -25,8 +27,7 @@ Sendwich sends the selected Figma layers to Adobe After Effects as native, edita
 Undo the whole import in After Effects with a single Ctrl/Cmd + Z.
 
 **Requirements**
-- Adobe After Effects 2022 or newer with the free Sendwich panel installed and open (Window › Extensions › Sendwich).
-  Download and setup guide: <LINK TO YOUR DOWNLOAD / GUIDE PAGE>
+- A separately installed copy of Adobe After Effects 2022 or newer, plus the free Sendwich companion panel. In After Effects, open Window › Extensions › Sendwich.
 - Figma and After Effects on the same computer. The plugin talks only to the panel on this computer (localhost);
   nothing is uploaded anywhere.
 - Click Connect to After Effects in Figma and approve the connection in the After Effects panel once.
@@ -34,9 +35,11 @@ Undo the whole import in After Effects with a single Ctrl/Cmd + Z.
 
 Background blur uses an adjustment layer with a separate alpha matte. Inside/outside strokes are transferred as editable outlines. Inner shadows remain unsupported. Angular and diamond gradients become radial.
 
-Free and open source (MIT License). Not affiliated with Adobe or Figma.
+Sendwich is an independent project.
 
-Support: <YOUR SUPPORT EMAIL OR PAGE>
+Privacy policy: https://github.com/saniochk/Sendwich/blob/main/FigmaCommunity/PRIVACY.md
+
+Support: https://github.com/saniochk/Sendwich/issues
 
 ## Network access (shown from manifest.json)
 http://localhost:7789 — reason: sends the selected layers to the Sendwich panel in After Effects on the same computer.

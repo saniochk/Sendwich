@@ -8,8 +8,8 @@ Sendwich sends selected artwork from Figma or Illustrator to After Effects on th
 
 Download the installer for your platform from this repository’s **Releases** page. After Effects 22+ and, for Illustrator transfer, Illustrator 25+ are declared in the CEP manifests.
 
-- **Windows** — close the Adobe apps and run `Sendwich-0.34-Windows.exe`. Keep the CEP option selected to enable unsigned CEP extensions for your user. The Figma development plugin is optional.
-- **macOS** — close the Adobe apps, mount `Sendwich-0.34-macOS.dmg` and run **Install Sendwich**. The installer enables unsigned CEP extensions for your user and copies the Figma development plugin to Documents. Use the signed and notarized build for public distribution.
+- **Windows** — close the Adobe apps and run `Sendwich-0.34.1-Windows.exe`. Keep the CEP option selected to enable unsigned CEP extensions for your user. The Figma development plugin is optional.
+- **macOS** — close the Adobe apps, mount `Sendwich-0.34.1-macOS.dmg` and run **Install Sendwich**. The installer enables unsigned CEP extensions for your user and copies the Figma development plugin to Documents. Use the signed and notarized build for public distribution.
 - Restart After Effects and open **Window → Extensions → Sendwich**. Keep the panel open while sending. To send from Illustrator, open **Window → Extensions → Sendwich** in Illustrator.
 
 ## Connect Figma
@@ -25,7 +25,7 @@ Figma frame clipping is ignored. Explicit mask layers are imported as track matt
 
 ## Uninstall
 
-On Windows, remove **Sendwich** through Installed Apps. On macOS, delete the `VectorBridgeAE` and `VectorBridgeAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma. The user-wide CEP setting is shared with other extensions and persists after removal.
+On Windows, remove **Sendwich** through Installed Apps. The Adobe extension folders retain their existing install paths for upgrades. On macOS, delete the `VectorBridgeAE` and `VectorBridgeAI` folders under `~/Library/Application Support/Adobe/CEP/extensions` and the Figma plugin folder in Documents. Remove the development plugin entry in Figma. The user-wide CEP setting is shared with other extensions and persists after removal.
 
 ## Development
 

@@ -1,11 +1,11 @@
 param(
     [Parameter(Mandatory)][string]$Compiler,
-    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34',
+    [ValidatePattern('^\d+\.\d+(\.\d+)?$')][string]$Version = '0.34.1',
     [switch]$SmokeTest
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot)
-& $Compiler "/DAppVersion=$Version" (Join-Path $PSScriptRoot 'VectorBridge.iss')
+& $Compiler "/DAppVersion=$Version" (Join-Path $PSScriptRoot 'Sendwich.iss')
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed with exit code $LASTEXITCODE" }
 if (!$SmokeTest) { return }
 

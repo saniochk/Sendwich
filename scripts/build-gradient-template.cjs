@@ -1,6 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const file = process.argv[2] || path.join(__dirname, "../VectorBridgeAE/jsx/gradients.aep");
+const file = process.argv[2] || path.join(__dirname, "../SendwichAE/jsx/gradients.aep");
 const capacity = 64;
 const base = fs.readFileSync(file);
 

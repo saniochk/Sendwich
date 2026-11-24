@@ -9,16 +9,16 @@ if [[ ! -f "$figma/manifest.json" && -f "$legacy_figma/manifest.json" ]]; then
   figma="$legacy_figma"
 fi
 
-for folder in VectorBridgeAE VectorBridgeAI; do
-  test -f "$payload/$folder/CSXS/manifest.xml"
+for panel in AE AI; do
+  test -f "$payload/Sendwich$panel/CSXS/manifest.xml"
 done
-test -f "$payload/VectorBridgeFigma/manifest.json"
+test -f "$payload/SendwichFigma/manifest.json"
 mkdir -p "$cep" "$(dirname "$figma")"
 
-for folder in VectorBridgeAE VectorBridgeAI; do
-  ditto "$payload/$folder" "$cep/$folder"
+for panel in AE AI; do
+  ditto "$payload/Sendwich$panel" "$cep/VectorBridge$panel"
 done
-ditto "$payload/VectorBridgeFigma" "$figma"
+ditto "$payload/SendwichFigma" "$figma"
 for version in 9 10 11 12 13; do
   defaults write "com.adobe.CSXS.$version" PlayerDebugMode -string 1
 done

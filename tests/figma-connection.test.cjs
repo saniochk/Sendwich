@@ -4,7 +4,7 @@ const path = require("node:path");
 const test = require("node:test");
 const vm = require("node:vm");
 
-const html = fs.readFileSync(path.join(__dirname, "../VectorBridgeFigma/ui.html"), "utf8");
+const html = fs.readFileSync(path.join(__dirname, "../SendwichFigma/ui.html"), "utf8");
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
 const ui = new vm.Script(scripts.at(-1)[1]);
 const flush = () => new Promise(resolve => setImmediate(resolve));

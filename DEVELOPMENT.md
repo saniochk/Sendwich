@@ -8,20 +8,20 @@
 
 ```
 VectorBridge/
-  VectorBridgeAE/        CEP-панель After Effects: принимает клип и строит слои; локальный сервер для Figma
+  SendwichAE/        CEP-панель After Effects: принимает клип и строит слои; локальный сервер для Figma
     CSXS/manifest.xml    AEFT 22+, CSXS 9, --enable-nodejs --mixed-context (Node для сервера)
     index.html, css/style.css, js/main.js (панель, опрос, сервер), js/anim.js (Lottie-статус), js/csi-lite.js
     js/lottie_light.min.js  lottie-web 5.12.2 (MIT)
     anim/wait.json, anim/build.json   точечные анимации статуса (заменяемые Lottie)
     jsx/host.jsx         ExtendScript: весь построитель слоёв
     jsx/gradients.aep    шаблон проекта с 16 G-Fill + 16 G-Stroke (для цветов градиентов)
-  VectorBridgeAI/        CEP-панель Illustrator: читает выделение и пишет клип
+  SendwichAI/        CEP-панель Illustrator: читает выделение и пишет клип
     jsx/host.jsx         ExtendScript: чтение документа + разбор служебного SVG
     (index.html, css, js, anim — как у AE)
-  VectorBridgeFigma/     плагин Figma: manifest.json, code.js (собирается), ui.html (собирается)
+  SendwichFigma/     плагин Figma: manifest.json, code.js (собирается), ui.html (собирается)
   FigmaCommunity/        материалы публикации: LISTING.md, PRIVACY.md, CHECKLIST_RU.md, icon-128.png, cover-1920x1080.png
   dev/                   исходники сборки и тесты (в установку не входят)
-    build_figma.py       собирает VectorBridgeFigma/code.js и ui.html, синхронизирует анимации в панель AI
+    build_figma.py       собирает SendwichFigma/code.js и ui.html, синхронизирует анимации в панель AI
     figma-src/code_main.js, ui_tpl.html   исходники плагина
     anim/mknoise.py      генератор анимаций wait/build
     gradients/make_template.py   генератор gradients.aep (библиотека py-aep 0.18.2, MIT)
@@ -78,7 +78,7 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
 
 ---
 
-## 4. Illustrator: `VectorBridgeAI/jsx/host.jsx`
+## 4. Illustrator: `SendwichAI/jsx/host.jsx`
 
 Вход: `vb_send(mode, scope, scale)`. Ставит `DOCUMENTCOORDINATESYSTEM`, пишет busy-флаг, вызывает `vb__send`.
 
@@ -109,7 +109,7 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
 
 ---
 
-## 5. After Effects: `VectorBridgeAE/jsx/host.jsx`
+## 5. After Effects: `SendwichAE/jsx/host.jsx`
 
 Вход: `vb_build(stampId)` → `run(path)` → `build(data)`.
 
@@ -177,7 +177,7 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
 
 ---
 
-## 7. Плагин Figma (`dev/figma-src` → `VectorBridgeFigma`)
+## 7. Плагин Figma (`dev/figma-src` → `SendwichFigma`)
 
 - **Сборка:** `python3 dev/build_figma.py`. code.js = code_main.js + `vbx_parseD` из хоста AI. ui.html = шаблон + lottie + build.json.
 - **manifest.json:**
@@ -239,13 +239,13 @@ type "image": file (абсолютный путь PNG), bounds, scale (1|2|4)
 Из корня архива:
 
 ```
-node dev/tests/figmock.js VectorBridgeFigma/code.js   # мок Figma → /tmp/figclip.json + сводка
+node dev/tests/figmock.js SendwichFigma/code.js   # мок Figma → /tmp/figclip.json + сводка
 node dev/tests/h14.js                                  # тот клип через мок AE (слои, matte, градиенты)
 node dev/tests/h13.js                                  # мок Illustrator (глаз, маски, блюр, blend) → мок AE
 node dev/tests/srvtest/run.js                          # сервер панели AE: /ping /busy /clip
-node dev/tests/optest2.js VectorBridgeAI/jsx/host.jsx  # SVG: прозрачность заливки, обёртки <g>
-node dev/tests/gradtest.js VectorBridgeAI/jsx/host.jsx <svg>   # радиальные градиенты из SVG
-node dev/tests/roundtest.js VectorBridgeFigma/code.js  # скругление углов, rectD
+node dev/tests/optest2.js SendwichAI/jsx/host.jsx  # SVG: прозрачность заливки, обёртки <g>
+node dev/tests/gradtest.js SendwichAI/jsx/host.jsx <svg>   # радиальные градиенты из SVG
+node dev/tests/roundtest.js SendwichFigma/code.js  # скругление углов, rectD
 ```
 
 Ошибки вида «no index 1 in ADBE Gaussian Blur 2» и «addBoxText is not a function» в моках ожидаемы: там нет эффектов и box text.

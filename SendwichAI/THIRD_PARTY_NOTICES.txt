@@ -4,7 +4,7 @@ Sendwich includes the following third-party software. Its license is reproduced 
 as its terms require.
 
 --------------------------------------------------------------------------------
-lottie-web 5.12.2 (lottie_light.min.js; also embedded in VectorBridgeFigma/ui.html)
+lottie-web 5.12.2 (lottie_light.min.js; also embedded in SendwichFigma/ui.html)
 https://github.com/airbnb/lottie-web
 Used to play the status animations in the panels and in the Figma plugin.
 --------------------------------------------------------------------------------

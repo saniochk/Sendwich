@@ -4,8 +4,8 @@ The three runtime packages are checked in and can be installed without a JavaScr
 
 ## Build
 
-- On Windows with [Inno Setup 6](https://jrsoftware.org/inno-setup/downloads) installed, run `./installers/windows/build.ps1 -Compiler 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'` from PowerShell. Output is `dist/Sendwich-0.34-Windows.exe`. The default build is unsigned. Use your code-signing identity and timestamp service before public distribution if available.
-- On macOS with Xcode Command Line Tools, run `bash installers/macos/build.sh`. Output is `dist/Sendwich-0.34-macOS.dmg`. Set `MACOS_SIGN_IDENTITY` to your Developer ID Application identity and `MACOS_NOTARY_PROFILE` to an existing local notarytool keychain profile to sign, notarize and staple the DMG. Builds without credentials are for testing. See [Apple’s distribution guide](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution).
+- On Windows with [Inno Setup 6](https://jrsoftware.org/inno-setup/downloads) installed, run `./installers/windows/build.ps1 -Compiler 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'` from PowerShell. Output is `dist/Sendwich-0.34.1-Windows.exe`. The default build is unsigned. Use your code-signing identity and timestamp service before public distribution if available.
+- On macOS with Xcode Command Line Tools, run `bash installers/macos/build.sh`. Output is `dist/Sendwich-0.34.1-macOS.dmg`. Set `MACOS_SIGN_IDENTITY` to your Developer ID Application identity and `MACOS_NOTARY_PROFILE` to an existing local notarytool keychain profile to sign, notarize and staple the DMG. Builds without credentials are for testing. See [Apple’s distribution guide](https://developer.apple.com/documentation/xcode/packaging-mac-software-for-distribution).
 - On GitHub, run **Actions → Build installers → Run workflow** after pushing the repository. Download the Windows and macOS artifacts. The workflow builds test artifacts. It verifies install/uninstall on a disposable Windows runner and mounts the DMG on a disposable macOS runner to verify the installer payload. Use a Mac with Adobe apps and Figma for the interactive checks below.
 
 ## Verify a release candidate
@@ -20,8 +20,12 @@ The three runtime packages are checked in and can be installed without a JavaScr
 ## GitHub publication
 
 1. Create an empty repository under the chosen owner, then push the contents of this directory to its default branch. Include hidden GitHub configuration files. Exclude `.build/`, `dist/` and certificates.
-2. Run the workflow or use the verified local builds. Create the `v0.34` release, attach the EXE and DMG, and add SHA-256 hashes. The changelog below can be used as the release description.
+2. Run the workflow or use the verified local builds. Create the `v0.34.1` release, attach the EXE and DMG, and add SHA-256 hashes. The changelog below can be used as the release description.
 3. Add the public Releases URL and support contact to the Figma listing, then follow the submission checklist.
+
+## v0.34.1 release notes
+
+- Renamed the source and package directories to SendwichAE, SendwichAI and SendwichFigma. Installed CEP paths and extension identifiers remain compatible with existing installations.
 
 ## v0.34 release notes
 

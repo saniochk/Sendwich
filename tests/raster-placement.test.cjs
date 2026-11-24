@@ -5,7 +5,7 @@ const test = require("node:test");
 const vm = require("node:vm");
 
 test("PNG import uses the exported bounds and stays visible for the entire composition", () => {
-  const source = fs.readFileSync(path.join(__dirname, "../VectorBridgeAE/jsx/host.jsx"), "utf8");
+  const source = fs.readFileSync(path.join(__dirname, "../SendwichAE/jsx/host.jsx"), "utf8");
   const seam = "    return { run: run, begin: begin, step: step, cancel: cancel,";
   assert.ok(source.includes(seam));
   const values = {};

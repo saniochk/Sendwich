@@ -45,7 +45,7 @@ test("Figma receiver checks approval and confines image references to received a
     os: { tmpdir: () => "/temp" },
     crypto: require("node:crypto")
   };
-  const source = path.join(__dirname, "../VectorBridgeAE/js/main.js");
+  const source = path.join(__dirname, "../SendwichAE/js/main.js");
   vm.runInNewContext(fs.readFileSync(source, "utf8"), {
     require: name => modules[name],
     window: { __adobe_cep__: {

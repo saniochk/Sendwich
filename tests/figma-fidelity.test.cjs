@@ -62,7 +62,7 @@ test("Figma keeps source groups and explicit masks, ignores frame clipping, and 
     absoluteRenderBounds: { x: 0, y: 0, width: 100, height: 100 }, remove() { rasterRemoved = true; }
   }), mixed: Symbol("mixed"), root: { name: "Fixture" }, currentPage: { selection: [frame] }, ui: {}, showUI() {}, on() {} };
   const context = vm.createContext({ figma, __html__: "" });
-  vm.runInContext(fs.readFileSync(path.join(__dirname, "../VectorBridgeFigma/code.js"), "utf8"), context);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, "../SendwichFigma/code.js"), "utf8"), context);
   const transfer = await vm.runInContext('send("vector", "selection", 2)', context);
   const root = transfer.data.items[0];
   assert.equal(root.name, "Frame");

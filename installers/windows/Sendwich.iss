@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "0.34"
+  #define AppVersion "0.34.1"
 #endif
 
 [Setup]
@@ -25,9 +25,9 @@ Name: "figma"; Description: "Include the local Figma Desktop plugin (optional)"
 Name: "cepdebug"; Description: "Allow unsigned Adobe extensions for this Windows account"
 
 [Files]
-Source: "..\..\VectorBridgeAE\*"; DestDir: "{userappdata}\Adobe\CEP\extensions\VectorBridgeAE"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\..\VectorBridgeAI\*"; DestDir: "{userappdata}\Adobe\CEP\extensions\VectorBridgeAI"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\..\VectorBridgeFigma\*"; DestDir: "{code:FigmaPluginDir}"; Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: figma
+Source: "..\..\SendwichAE\*"; DestDir: "{userappdata}\Adobe\CEP\extensions\VectorBridgeAE"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\SendwichAI\*"; DestDir: "{userappdata}\Adobe\CEP\extensions\VectorBridgeAI"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\SendwichFigma\*"; DestDir: "{code:FigmaPluginDir}"; Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: figma
 
 [Registry]
 Root: HKCU; Subkey: "Software\Adobe\CSXS.9"; ValueType: string; ValueName: "PlayerDebugMode"; ValueData: "1"; Tasks: cepdebug

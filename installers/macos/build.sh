@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 
-version="${1:-0.34}"
+version="${1:-0.34.1}"
 [[ "$version" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] || { echo "Invalid version" >&2; exit 1; }
 work="$(mktemp -d)"
 trap 'rm -r "$work"' EXIT
@@ -14,7 +14,7 @@ osacompile -o "$app" installers/macos/Installer.applescript
 resources="$app/Contents/Resources"
 mkdir -p "$resources/payload"
 cp installers/macos/install.sh "$resources/"
-for folder in VectorBridgeAE VectorBridgeAI VectorBridgeFigma; do
+for folder in SendwichAE SendwichAI SendwichFigma; do
   ditto "$folder" "$resources/payload/$folder"
 done
 mkdir "$work/Sendwich.iconset"
