@@ -12,6 +12,10 @@ Download the installer for your platform from this repository’s **Releases** p
 - **macOS** — close the Adobe apps, mount `Sendwich-0.34.1-macOS.dmg` and run **Install Sendwich**. The installer enables unsigned CEP extensions for your user and copies the Figma development plugin to Documents. Use the signed and notarized build for public distribution.
 - Restart After Effects and open **Window → Extensions → Sendwich**. Keep the panel open while sending. To send from Illustrator, open **Window → Extensions → Sendwich** in Illustrator.
 
+## Code signing policy
+
+Sendwich is applying for code signing through [SignPath Foundation](https://signpath.org/). The current Windows installer (`Sendwich-0.34.1-Windows.exe`) is unsigned.
+
 ## Connect Figma
 
 1. In Figma Desktop, open a design file and use **Plugins → Development → Import plugin from manifest…**. Select the manifest path shown by the installer. On a fresh Windows installation, it is in `Documents/Sendwich Figma`. A Community installation will use its listing instead.
