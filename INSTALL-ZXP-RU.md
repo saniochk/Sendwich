@@ -3,9 +3,9 @@
 | Скачать | Для чего |
 | --- | --- |
 | [Sendwich.zxp](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich.zxp?build=6ea088325efd) | Обе панели: After Effects и Illustrator |
-| [Плагин Figma — ZIP](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich-0.34.4-Figma.zip) | Плагин Figma с файлом SendwichFigma/manifest.json |
+| [Плагин Figma — ZIP](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/Sendwich-0.34.4-Figma.zip?plugin=1707136691372303390) | Плагин Figma с файлом SendwichFigma/manifest.json |
 
-Один файл устанавливает панели After Effects и Illustrator. [Контрольные суммы SHA-256](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/SHA256SUMS.txt?build=6ea088325efd). Плагин Figma устанавливается отдельно. Заявленные версии: After Effects 22+ и Illustrator 25+.
+Один файл устанавливает панели After Effects и Illustrator. [Контрольные суммы SHA-256](https://github.com/saniochk/Sendwich/releases/download/v0.34.4/SHA256SUMS.txt?build=figma-1707136691372303390). Плагин Figma устанавливается отдельно. Заявленные версии: After Effects 22+ и Illustrator 25+.
 
 1. Сохраните работу и закройте After Effects и Illustrator.
 2. Откройте бесплатный [aescripts ZXP/UXP Installer](https://aescripts.com/learn/post/zxp-installer).
